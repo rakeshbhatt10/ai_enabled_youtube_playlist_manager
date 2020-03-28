@@ -2,9 +2,7 @@ import fetch from 'isomorphic-fetch';
 
 
 const BASE_API_URL = "https://www.googleapis.com/youtube/v3/"
-const GOOGLE_CLIENT_ID = "649381324429-enf35sme5dkn9shto6hf3b1stlmgqogd.apps.googleusercontent.com"
-const GOOGLE_CLIENT_SECRET = "9dut8k-Ew28oBGEAO54fNRmf"
-const GOOGLE_REDIRECTED_URL = "http://localhost:3000"
+
 
 export function getYoutubePlayListItems( access_token, playListId ) {
 
@@ -47,26 +45,6 @@ export function deleteVideoElement( access_token, videoItemId ) {
     }
 
     return delete_api(access_token, "playlistItems", params);
-}
-
-
-export function getRefreshTokenDetails(code) {
-
-    const params = {
-        "code": code,
-        "client_id": GOOGLE_CLIENT_ID,
-        "client_secret": GOOGLE_CLIENT_SECRET,
-        "grant_type": "authorization_code",
-        "redirect_uri": GOOGLE_REDIRECTED_URL
-    }
-
-    let url = "https://www.googleapis.com/oauth2/v4/token?";
-
-    Object.keys(params).map((key) => {
-        url = url + `${key}=${decodeURIComponent(params[key])}&`;
-    });
-
-    return post_api(url, null);
 }
 
 function post_api(url, data) {
