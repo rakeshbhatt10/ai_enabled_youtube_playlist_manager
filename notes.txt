@@ -1,0 +1,6 @@
+https://developers.google.com/youtube/v3/docs/playlists/list
+https://developers.google.com/youtube/v3/docs/comments/list
+http://deepdivision.net/2019/03/20/nlp-keras-model-in-browser-with-tensorflowjs.html
+https://github.com/MihailSalnikov/NERjs
+https://towardsdatascience.com/nlp-keras-model-in-browser-with-tensorflow-js-f4d5035466a2
+https://developers.google.com/youtube/v3/docs/comments/list

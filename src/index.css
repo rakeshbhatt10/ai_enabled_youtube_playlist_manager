@@ -11,3 +11,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.loginContainer {
+  position: absolute !important;
+  top: 30%;
+  left: 40%;
+}
