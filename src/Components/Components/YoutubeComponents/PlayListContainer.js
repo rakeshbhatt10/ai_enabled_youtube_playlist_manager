@@ -4,7 +4,6 @@ import {predictArtist} from '../Utils/TfUtils/TfNer';
 import {predictToxicElements} from '../Utils/TfUtils/TfToxicity';
 import {getVideoComments, deleteVideoElement} from '../Utils/Api'
 
-
 export default class PlaylistContainer extends React.Component {
 
     constructor(props) {
@@ -128,7 +127,7 @@ export default class PlaylistContainer extends React.Component {
                         </div>
                         <div className="col-6 text-right">
                             {this.props.profile.email}
-                            <img className="ml-3 img-thumbnail"  src={this.props.profile.imageUrl}/>
+                            <img alt="" className="ml-3 img-thumbnail"  src={this.props.profile.imageUrl}/>
                         </div>
                     </div>
                     <div className="row">
