@@ -8,7 +8,7 @@ export default class LoginContainer extends React.Component {
 
         super(props);
         this.state = {
-            "googleClientId": "649381324429-enf35sme5dkn9shto6hf3b1stlmgqogd.apps.googleusercontent.com"
+            "googleClientId": "your_google_client_id"
         }
     }
 
