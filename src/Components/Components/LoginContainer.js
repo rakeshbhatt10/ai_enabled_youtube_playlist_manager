@@ -12,7 +12,6 @@ export default class LoginContainer extends React.Component {
         }
     }
 
-
     render() {
         return (
             <div className="loginContainer">
@@ -21,8 +20,9 @@ export default class LoginContainer extends React.Component {
                         <div className="col-12">
                             <div className="card">
                                 <div className="card-body">
-                                    <div className="card-title">
-                                        <h3>YouTube Playlist Manager</h3>
+                                    <div className="card-title text-center">
+                                        <h3>Tensflowjs (Demo) [NER/Toxicity]</h3>
+                                        <h5>YouTube Playlist Manager</h5>
                                     </div>
                                     <div className="card-body text-center">
                                         <div className="inner"> 
@@ -33,8 +33,8 @@ export default class LoginContainer extends React.Component {
                                                 accessType="offline"
                                                 responseType="permissions"
                                                 offline={true}
-                                                onSuccess={(response) => this.props.responseGoogle(response)}
-                                                onFailure={(response) => this.props.responseGoogle(response)}
+                                                onSuccess={(response) => this.props.receiveGoogleAuth(response)}
+                                                onFailure={(response) => this.props.receiveGoogleAuth(response)}
                                             />
                                         </div>            
                                     </div>

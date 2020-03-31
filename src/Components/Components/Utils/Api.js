@@ -1,8 +1,5 @@
 import fetch from 'isomorphic-fetch';
-
-
 const BASE_API_URL = "https://www.googleapis.com/youtube/v3/"
-
 
 export function getYoutubePlayListItems( access_token, playListId ) {
 
@@ -44,6 +41,8 @@ export function deleteVideoElement( access_token, videoItemId ) {
         "id": videoItemId
     }
 
+    console.log("Params : ", params);
+
     return delete_api(access_token, "playlistItems", params);
 }
 
@@ -76,7 +75,6 @@ function delete_api(access_token, end_point, params) {
                 'Content-Type': 'application/json'
             },
         }).then((response) => {
-            return response.json();
         });
 }
 

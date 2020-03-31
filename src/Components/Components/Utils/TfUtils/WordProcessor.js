@@ -1,4 +1,4 @@
-import {words_vocab} from './wordvocabs';
+import {words_vocab} from './WordVocabs';
 
 const MAX_SEQUENCE_LENGTH = 113;
 

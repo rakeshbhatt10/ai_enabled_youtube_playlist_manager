@@ -1,8 +1,8 @@
 import React from 'react';
 
-import {predictWords} from '../utils/tfpipeline/tfpipeine';
-import {predictToxicElements} from '../utils/tfpipeline/toxicity';
-import {getVideoComments, deleteVideoElement} from '../utils/api'
+import {predictArtist} from '../Utils/TfUtils/TfNer';
+import {predictToxicElements} from '../Utils/TfUtils/TfToxicity';
+import {getVideoComments, deleteVideoElement} from '../Utils/Api'
 
 
 export default class PlaylistContainer extends React.Component {
@@ -27,7 +27,6 @@ export default class PlaylistContainer extends React.Component {
                 this.categorizePlaylist(nextProps.playlistitems.data[this.state.playListId].items);
             });
         }
-        // console.log("Category data on render : ", categoryData);
     }
 
     openPlaylists(playListId) {
@@ -36,46 +35,25 @@ export default class PlaylistContainer extends React.Component {
         });
     }
 
-    getPlaylistChunk(chunkSize, items) {
-        
-        return Array(Math.ceil(items.length/chunkSize)).fill().map((_,i) => {
-            return items.slice(i*chunkSize,i*chunkSize+chunkSize);
-        });
-    }
-    
-    copyObject(items) {
-        return JSON.parse(JSON.stringify(items));
-    }
-
     getTotalVideos() {
         return this.props.playlistitems.data[this.state.playListId].pageInfo.totalResults;
     }
 
     async categorizePlaylist(items) {
-
-        console.log("Processing categoried data");
-
         const categorizedData = await items.reduce(async (allItems, item) => {
-
             const accumulator = await allItems;
-            // console.log("All items available : ", accumulator);
-
-            const name = await predictWords(item.snippet.title);
+            const name = await predictArtist(item.snippet.title);
             let nameItems = [];
 
-            // console.log("Available Name : ", name);
             if (accumulator[name]) {
                 nameItems = accumulator[name];
             }  
-            // console.log("New Items : ", nameItems);
 
             nameItems.push(item);
             accumulator[name] = nameItems;
 
             return accumulator;
         }, {});
-
-        console.log("Categorized Data ; ", categorizedData);
 
         const names = Object.keys(categorizedData);
         const index = names.indexOf('other');
@@ -98,13 +76,9 @@ export default class PlaylistContainer extends React.Component {
         this.setState({videoToxicity}, () => {
             const _this = this;
             getVideoComments(this.props.access_token, videoId).then((data) => {
-                console.log("Video comment data : ", data);
                 const comments = data.items.map(({snippet}) =>  {
                     return snippet.topLevelComment.snippet.textOriginal;
                 });
-    
-                console.log("Comments");
-    
                 predictToxicElements(comments).then((predictions) => {
                     console.log(predictions);
                     videoToxicity[videoId] = {
@@ -117,7 +91,6 @@ export default class PlaylistContainer extends React.Component {
     
             });
         })
-        
     }
 
     selectVideoElementId(videoElementId) {
@@ -134,9 +107,8 @@ export default class PlaylistContainer extends React.Component {
     
 
     applyAction(e) {
-        if(e.target.value == "delete") {
+        if(e.target.value === "delete") {
             deleteVideoElement(this.props.access_token, this.state.videoElementId).then((data) => {
-                console.log("Delete response : ", data);
                 this.props.fetchplayListitems(this.state.playListId);
             });
         }
@@ -144,9 +116,6 @@ export default class PlaylistContainer extends React.Component {
 
     render() {
         
-        console.log(this.props['playlistitems'], this.props.playlists, this.props);
-        console.log("Is processing tasks : ", this.state.is_processing);
-
         return (
             <div className="">
                 <div className="">
@@ -164,20 +133,18 @@ export default class PlaylistContainer extends React.Component {
                     </div>
                     <div className="row">
                         <div className={`col-${this.state.playListId === null ? "12": "2"}`}>
-                            {this.getPlaylistChunk(3, this.copyObject(this.props.playlists.items)).map((itemList) => {
-                                return (<div className="">
-                                    {itemList.map((item) => {
-                                        return (
-                                                <div style={{cursor: "pointer"}} className={`card ${this.state.playListId=== item.id ? "text-white bg-info":""}`} onClick={() => this.openPlaylists(item.id)}>
-                                                    <div className="card-body">    
-                                                        <h5 className="card-title" style={{"textDecoration": "underline"}}>{item.snippet.title}</h5>
-                                                        <p className="card-text">{item.contentDetails.itemCount} videos.</p>
-                                                    </div>
+                            <div className="">
+                                {this.props.playlists.items.map((item) => {
+                                    return (
+                                            <div style={{cursor: "pointer"}} className={`card ${this.state.playListId=== item.id ? "text-white bg-info":""}`} onClick={() => this.openPlaylists(item.id)}>
+                                                <div className="card-body">    
+                                                    <h5 className="card-title" style={{"textDecoration": "underline"}}>{item.snippet.title}</h5>
+                                                    <p className="card-text">{item.contentDetails.itemCount} videos.</p>
                                                 </div>
-                                        )
-                                    })}
-                                </div>)
-                            })}
+                                            </div>
+                                    )
+                                })}
+                            </div>
                         </div>
                         {this.state.playListId !== null && <div className="col-10">
 
@@ -208,7 +175,7 @@ export default class PlaylistContainer extends React.Component {
                                         <tr>
                                             <th>S.No</th>
                                             <th> 
-                                                <select onClick={(e) => this.applyAction(e)} className="form-control" name="" id="">
+                                                <select onChange={(e) => this.applyAction(e)} className="form-control" name="" id="">
                                                     <option style={{'display': 'none'}}>Select Action</option>
                                                     <option value="delete">
                                                         Delete
@@ -275,7 +242,6 @@ export default class PlaylistContainer extends React.Component {
                                                         </tr>
                                                     )
                                                 });
-                                                // console.log("Keys : ", keys);
                                             return keys;
                                         })}
                                     </table>

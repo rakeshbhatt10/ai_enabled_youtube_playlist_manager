@@ -23,7 +23,6 @@ loadToxicityModel().then(() => {
 export async function predictToxicElements(sentences) {
 
     const predictions = await toxicityModel.classify(sentences);
-    console.log("Predictions : ", predictions);
     const deductions = predictions.reduce((allItems, {label, results}) => {
         const labelCount = results.filter(({match}) =>  match === true).length;
         if (labelCount > 0) {

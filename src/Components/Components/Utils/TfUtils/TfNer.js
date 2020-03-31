@@ -1,7 +1,7 @@
 import * as tf from '@tensorflow/tfjs';
 
-import {make_sequences} from './wordprocessor';
-import {tags_vocab} from './wordvocabs';
+import {make_sequences} from './WordProcessor';
+import {tags_vocab} from './WordVocabs';
 
 let model, emodel;
 const getKey = (obj,val) => Object.keys(obj).find(key => obj[key] === val); // For getting tags by tagid
@@ -17,7 +17,7 @@ loadNerModel().then(() => {
     console.log("Ner model loaded");
 });
 
-export async function predictWords(sentence) {
+export async function predictArtist(sentence) {
 
     const words = sentence.split(' ');
     let sequence = make_sequences(words);
@@ -42,7 +42,6 @@ export async function predictWords(sentence) {
     const bper = predictions.filter(({tag}) => tag === "B-PER");
     const iper = predictions.filter(({tag}) => tag === "I-PER");
 
-    // console.log("Predictions : ", predictions);
     let name = '';
 
     if (bper.length > 0) {
